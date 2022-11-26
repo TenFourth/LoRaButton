@@ -82,6 +82,12 @@ LoRa Buttonのピンとシリアル変換の端子を次のように繋ぎます
 | ストップビット | 1bit |
 | フロー制御 | none |
 
+送信遅延の項目があれば設定します。Tera Termでは `Transmit delay` という項目がありますので、1行毎に10 msec程度の遅延を入れます
+
+![Transmit delayのスクリーンショット](img/screenshots/transmit-delay.png)
+
+遅延の設定をしないと、後述の手順でプログラムを貼り付けする際に一部が抜ける可能性があります。
+
 ターミナルを接続して、LoRa Buttonの電源が入るとプロンプトが表示されます。
 
 ```:LRA1プロンプト
@@ -98,7 +104,16 @@ OK
 
 ## プログラムの書込み
 
-TODO:
+1. `EDIT 1` を入力して[Enter]
+2. `NEW` を入力して[Enter]
+3. [BASICプログラム](sample-codes/lra1-basic/lorawan.bas)をコピーペーストで貼り付けします
+4. `PSAVE` を入力して[Enter]
+5. `AUTO="PLOAD:RUN":SSAVE` を入力して[Enter]
+    * このコマンドで起動時にプログラムが自動的に実行されるようになります
+    * 既に自動実行が設定されている場合は、何度も設定し直す必要はありません
+    * 自動的に実行しないようにするには `AUTO="":SSAVE` として、AUTOの設定を空にします
+6. `RESET` を入力して[Enter]キーを押し、再起動後にJOINが実行されることを確認します
+    * この時点ではLoRaWANサーバー側の設定がされてないので、 `timeout` が表示されます
 
 ## LED
 
@@ -111,6 +126,8 @@ TODO:
 # LoRaWANで使う
 
 ここでは、[The Things Network](https://www.thethingsnetwork.org/) を例にしてアプリケーションのノードにLoRa Buttonを登録する手順を紹介します。
+
+予め、The Things Networkのアカウントの用意とゲートウェイの登録が済んでいる状態とします。
 
 ## アプリケーションの登録
 
