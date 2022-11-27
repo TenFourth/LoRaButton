@@ -100,6 +100,8 @@ OK
 * プログラムが書き込まれてて、自動的に実行するようになっている場合はバージョン番号の下の行に `.` が増えていく状態になります。`.` が5つになる前に `Ctrl キー` と `c` を同時に押すとプロンプト `>` (コマンド待ち)の状態になります
 * ターミナルに何も表示されない場合は、モジュールがスリープ状態になっている可能性がありますので、[RESET]ピンと[GND]ピンを繋いで再起動させてみてください
 
+送信出力やデータレート等の設定はターミナルのコマンドで行います。
+
 ターミナルの使い方やコマンドは、モジュール製造元（[株式会社アイ・ツー](https://i2-ele.co.jp/)）の [ソフトウェアリファレンスマニュアル](https://www.i2-ele.co.jp/LRA1_software.html) をご参照ください。
 
 ## プログラムの書込み
@@ -131,15 +133,84 @@ OK
 
 ## アプリケーションの登録
 
-TODO:
+アプリケーションを新しく作成して、LoRa Buttonの機能(ボタンが押されたらデータが届く)をThe Things Networkに登録します。
+
+アプリケーションの画面を開きます
+
+[Create application]をクリックすると、「Create application」の画面が表示されます。
+
+![Create applicationの画面](img/screenshots/fig-create-application.png)
+
+「アプリケーションID」には小文字の英字、数字と `-` の組み合わせで任意に決めます。
+
+アカウント名などの自分が使っていると分かるようなユニークな名前とButtonで使うことが分かるような文字列を組み合わせるのが良いかもしれません。例えば「(何かユニークな名前)-lora-button」。ボタンが何に使うかが明確であれば、「lora-button」ではなく目的を示す名前にしても良いです。
+
+IDは一度決めると後から変更することはできず、アプリケーションを削除すると、再度作り直したアプリケーションで同じIDを付けることはできませんのでご注意ください。
+
+「Application name」は画面に表示される名前です。任意に決められ、省略可能です。
+
+「説明」は必要に応じて登録できます。任意ですので空欄でも構いません。
+
+[Create application]をクリックすると、アプリケーションが作成されます
+
+### エンドデバイスの追加
+
+アプリケーションの「概要」のページを表示して、[Register end device]をクリックします。
+
+![](img/screenshots/fig-register-end-device.png)
+
+「Register end device」の画面が表示されます。「Enter end device specifies manually」を選択します。
+
+周波数プランはゲートウェイが8チャンネル(もしくは不明)であれば `Japan 920-923 MHz with LBT (channels 31-38)` 、ゲートウェイが16チャンネルであれば `Japan 920-923 MHz with LBT (channels 24-27 and 35-38)` を選びます。ゲートウェイも可能であればこちらのいずれかのチャンネルに合わせるのが理想です。
+
+LoRaWANバージョンは `LoRaWAN Specification 1.0.3` を選びます。
+
+地域パラメータのバージョンは選択不可になりますが、 `RP001 Regional Parameters 1.0.3 revision A` が選択されます。
+
+JoinEUIは `0000000000000000` を入力します。入力欄の空白は自動的に付けられます。
+
+[Confirm]をクリックすると、「Provisioning information」の欄が表示されます
+
+![Provisioning informationの画面](img/screenshots/fig-provisioning-information.png)
+
+DevEUIにはLoRa Buttonのラベルに記載された「DevEUI」の値を入力します。ラベルのQRコードを読み込んで取得することもできますが、読み込めない場合はターミナルから `? WAN_DEVEUI` コマンドで確認することもできます。入力した値は大文字に変換されますが、設定には影響ありません。
+
+AppKeyは[生成]をクリックして生成された値をLoRa Buttonに設定します。ターミナルで以下の操作を行います
+
+1. [RESET]ピンと[GND]ピンを繋ぎ、LoRa Buttonを再起動します
+2. ターミナルでバージョン番号の下の `.` が5つになる前に `Ctrl` キーと `c` を同時に押して、プロンプト `>` の状態にします
+3. 生成されたAppKeyを、 `$""` の `"～"` の間に挟んで設定します
+```
+PASS=999999
+WAN_APPKEY=$"xxxx..."
+SSAVE
+```
+4. [RESET]ピンと[GND]ピンを繋ぎ、LoRa Buttonを再起動します
+
+[Register end device]をクリックしてエンドデバイスを登録します
+
+複数のLoRa Buttonを使う時は、別のButtonも同様にエンドデバイスに登録します
 
 ## ペイロードフォーマッタの登録
 
-TODO:
+アプリケーションの画面を表示して、以下の操作を行います。
+
+1. [ペイロードフォーマッター]の[アップリンク]をクリックします
+2. [Custom Javascript formatter] をクリックします
+3. [ペイロードフォーマッターのソースコード](sample-codes/ttn-payload-formatter/format.js)をコピーペーストで貼り付けします
+4. [変更を保存]をクリックします
+
+![ペイロードフォーマッターの登録説明図](img/screenshots/fig-save-payload-formatter.png)
 
 ## データの確認
 
-TODO:
+アプリケーションの画面を表示して、[ライブデータ] をクリックします。
+
+LoRa Buttonのボタンを押した時に、JOINが行われ、アップリンクメッセージが届く事を確認します。この時、ペイロードに `battery` (電池電圧)と `button_pressed` (押されたボタンの種別 ※常に1) が含まれ、ペイロードフォーマッタのパースが出来ていることを確認します。
+
+![ライブデータでチェックする説明図](img/screenshots/fig-livedata-check.png)
+
+以上の手順で、LoRa ButtonがThe Things Networkで繋がる所まで出来ました。
 
 <a id="specification"></a>
 # 製品仕様
