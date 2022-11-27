@@ -157,9 +157,13 @@ IDは一度決めると後から変更することはできず、アプリケー
 
 アプリケーションの「概要」のページを表示して、[Register end device]をクリックします。
 
-![](img/screenshots/fig-register-end-device.png)
+![register end deviceの画面](img/screenshots/fig-register-end-device.png)
 
-「Register end device」の画面が表示されます。「Enter end device specifies manually」を選択します。
+「Register end device」の画面が表示されます。
+
+![End device typeの画面](img/screenshots/fig-end-device-type.png)
+
+「Enter end device specifies manually」を選択します。
 
 周波数プランはゲートウェイが8チャンネル(もしくは不明)であれば `Japan 920-923 MHz with LBT (channels 31-38)` 、ゲートウェイが16チャンネルであれば `Japan 920-923 MHz with LBT (channels 24-27 and 35-38)` を選びます。ゲートウェイも可能であればこちらのいずれかのチャンネルに合わせるのが理想です。
 
