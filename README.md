@@ -1,7 +1,7 @@
 # LoRa Button
 
 ![LoRa Button写真](img/button-images/button-front.jpg)
-このページはテンフォースが販売する、LoRa Buttonのドキュメントやサンプルコードを公開しています。
+このページはLoRa Buttonのドキュメントやサンプルコードを公開しています。
 
 このリポジトリの全てのファイルは MIT ライセンスです。
 
